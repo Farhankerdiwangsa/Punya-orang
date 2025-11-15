@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Payment DANA - Tema Merah</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffcccc; /* Latar belakang merah muda */
+            color: #990000; /* Teks merah gelap */
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff; /* Putih untuk kontras */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Bayangan merah */
+        }
+        h1 {
+            text-align: center;
+            color: #cc0000; /* Merah lebih gelap */
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #990000;
+        }
+        input, select, button {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ff6666; /* Border merah */
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ff0000; /* Tombol merah */
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #cc0000; /* Merah lebih gelap saat hover */
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 100px;
+        }
+        .qr-section {
+            display: none; /* Tersembunyi awalnya */
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-section h2 {
+            color: #cc0000;
+        }
+        #qrcode {
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/DANA_Indonesia_logo.svg/512px-DANA_Indonesia_logo.svg.png" alt="DANA Logo" onerror="this.style.display='none';">
+            <h1>All Payment DANA</h1>
+        </div>
+        <form id="paymentForm" action="#" method="post"> <!-- Ganti action dengan endpoint pembayaran sebenarnya -->
+            <label for="amount">Jumlah Pembayaran (IDR):</label>
+            <input type="number" id="amount" name="amount" placeholder="Masukkan jumlah" required>
+
+            <label for="phone">Nomor Telepon DANA:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Masukkan nomor telepon" required>
+
+            <label for="payment-method">Metode Pembayaran:</label>
+            <select id="payment-method" name="payment-method">
+                <option value="dana">DANA</option>
+                <option value="bank">Transfer Bank</option>
+                <option value="ewallet">E-Wallet Lain</option>
+            </select>
+
+            <label for="description">Deskripsi Pembayaran:</label>
+            <input type="text" id="description" name="description" placeholder="Opsional">
+
+            <button type="submit">Bayar Sekarang</button>
+        </form>
+        <div class="qr-section" id="qrSection">
+            <h2>Langkah Selanjutnya: Scan QR Code</h2>
+            <p>Scan QR code di bawah ini menggunakan aplikasi DANA untuk menyelesaikan pembayaran.</p>
+            <div id="qrcode"></div>
+            <p style="font-size: 12px; color: #666;">QR code ini dihasilkan berdasarkan informasi yang Anda masukkan. Pastikan untuk memverifikasi sebelum scan.</p>
+        </div>
+        <p style="text-align: center; font-size: 12px; color: #666;">Pastikan informasi Anda benar sebelum melanjutkan pembayaran.</p>
+    </div>
+
+    <!-- Library QR Code dari CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah submit form standar
+
+            // Ambil nilai dari form
+            const amount = document.getElementById('amount').value;
+            const phone = document.getElementById('phone').value;
+            const method = document.getElementById('payment-method').value;
+            const description = document.getElementById('description').value;
+
+            // Buat string data untuk QR code (contoh sederhana; sesuaikan dengan format DANA)
+            const qrData = `DANA Payment\nAmount: ${amount} IDR\nPhone: ${phone}\nMethod: ${method}\nDescription: ${description}`;
+
+            // Hapus QR code lama jika ada
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+
+            // Generate QR code baru
+            new QRCode(qrContainer, {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: "#990000", // Warna gelap merah
+                colorLight: "#ffffff", // Warna terang putih
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Tampilkan bagian QR
+            document.getElementById('qrSection').style.display = 'block';
+
+            // Scroll ke bagian QR
+            document.getElementById('qrSection').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
